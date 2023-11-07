@@ -1,18 +1,26 @@
 import java.util.Scanner;
+import java.util.List;
 import java.util.Random;
 
 public class KnapsackGeneticAlgorithm {
-    static int knapsackSize;
-    static int numItems;
-    static Item[] items; // Array of items with weight and value
-    static int populationSize = 50;
-    static int maxGenerations = 100;
-    static double mutationRate = 0.1;
+     int knapsackSize;
+     int numItems;
+     List<Item> items; // Array of items with weight and value
+     int populationSize = 50;
+     int maxGenerations = 100;
+     double mutationRate = 0.1;
+     static int testCaseNum=0;
 
 
-
+    public KnapsackGeneticAlgorithm(int knapsackSize, int numItems, List<Item> items) {
+        this.knapsackSize = knapsackSize;
+        this.numItems = numItems;
+        this.items = items;
+        this.testCaseNum++;
+        
+    }
     // Initialize a population with random solutions
-    public static int[][] initializePopulation(int popSize) //hnwza3 el zeroes w el ones
+    public int[][] initializePopulation(int popSize) 
     {
         int[][] population = new int[popSize][numItems];
         Random random = new Random();
@@ -25,14 +33,14 @@ public class KnapsackGeneticAlgorithm {
     }
 
     // Calculate the fitness of a chromosome (total value)
-    public static int fitness(int[] chromosome) {
+    public int fitness(int[] chromosome) {
         int totalWeight = 0;
         int totalValue = 0;
         for (int i = 0; i < numItems; i++) {
-            if (chromosome[i] == 1) //lw el bit be one bnakhod el item m3ana
+            if (chromosome[i] == 1)
             {
-                totalWeight += items[i].weight; // Weight
-                totalValue += items[i].value; // Value
+                totalWeight += items.get(i).weight; // Weight
+                totalValue += items.get(i).value; // Value
             }
         }
         if (totalWeight > knapsackSize) {
@@ -42,7 +50,7 @@ public class KnapsackGeneticAlgorithm {
     }
 
     // Rank-based selection
-    public static int[][] selectParents(int[][] population) {
+    public int[][] selectParents(int[][] population) {
         int[][] parents = new int[2][numItems];
         int[] selectedIndices = new int[2];
 
@@ -84,7 +92,7 @@ public class KnapsackGeneticAlgorithm {
     }
 
     // One-point crossover
-    public static int[][] crossover(int[] parent1, int[] parent2) {
+    public int[][] crossover(int[] parent1, int[] parent2) {
         int[] child1 = new int[numItems];
         int[] child2 = new int[numItems];
         int crossoverPoint = new Random().nextInt(numItems);
@@ -103,7 +111,7 @@ public class KnapsackGeneticAlgorithm {
     }
 
     // Mutation
-    public static void mutate(int[] chromosome) {
+    public void mutate(int[] chromosome) {
         for (int i = 0; i < numItems; i++) {
             if (Math.random() < mutationRate) {
                 chromosome[i] = 1 - chromosome[i];
@@ -112,7 +120,7 @@ public class KnapsackGeneticAlgorithm {
     }
 
     // Main genetic algorithm
-    public static void geneticAlgorithm() {
+    public void geneticAlgorithm() {
         int[][] population = initializePopulation(populationSize);
 
         for (int generation = 0; generation < maxGenerations; generation++) {
@@ -143,19 +151,19 @@ public class KnapsackGeneticAlgorithm {
 
         int[] bestSolution = population[bestIndex];
 
-        System.out.println("Test Case Index: 1");
+        System.out.println("\n \nTest Case Index: "+testCaseNum);
         System.out.println("Number of Selected Items: " + countOnes(bestSolution));
         System.out.println("Total Value: " + bestValue);
         System.out.println("Total Weight: " + calculateTotalWeight(bestSolution));
         System.out.println("Selected Items:");
         for (int i = 0; i < numItems; i++) {
             if (bestSolution[i] == 1) {
-                System.out.println("Item " + (i + 1) + " - Weight: " + items[i].weight + ", Value: " + items[i].value);
+                System.out.println("Item " + (i + 1) + " - Weight: " + items.get(i).weight + ", Value: " + items.get(i).value);
             }
         }
     }
 
-    public static int countOnes(int[] array) //calculate value
+    public int countOnes(int[] array) //calculate value
     {
         int count = 0;
         for (int value : array) {
@@ -164,35 +172,15 @@ public class KnapsackGeneticAlgorithm {
         return count;
     }
 
-    public static int calculateTotalWeight(int[] solution)  //calculate total weight
+    public int calculateTotalWeight(int[] solution)  //calculate total weight
     {
         int totalWeight = 0;
         for (int i = 0; i < numItems; i++) {
             if (solution[i] == 1) {
-                totalWeight += items[i].weight;
+                totalWeight += items.get(i).weight;
             }
         }
         return totalWeight;
     }
 
-    public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
-
-        System.out.println("Enter the knapsack size:");
-        knapsackSize = scanner.nextInt();
-
-        System.out.println("Enter the number of items:");
-        numItems = scanner.nextInt();
-
-        items = new Item[numItems];
-        System.out.println("Enter the weight and value of each item:");
-        for (int i = 0; i < numItems; i++) {
-            System.out.println("Item " + (i + 1) + ":");
-            int weight = scanner.nextInt();
-            int value = scanner.nextInt();
-            items[i] = new Item(weight, value);
-        }
-        geneticAlgorithm();
-        scanner.close();
-    }
 }

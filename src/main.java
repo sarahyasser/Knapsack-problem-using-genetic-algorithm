@@ -25,11 +25,15 @@ public class main {
             List<Item> items = new ArrayList<>();
 
             if (reader.readTestCase(knapsackSize, items)) {
-                System.out.println("Knapsack Size: " + knapsackSize[0]);
-                System.out.println("Items:");
-                for (Item item : items) {
-                    System.out.println("Weight: " + item.weight + " Value: " + item.value);
-                }
+//                System.out.println("Knapsack Size: " + knapsackSize[0]);
+//                System.out.println("Items:");
+//                for (Item item : items) {
+//                    System.out.println("Weight: " + item.weight + " Value: " + item.value);
+//                }
+            	int itemsSize = items.size();
+            	KnapsackGeneticAlgorithm  k1 =new KnapsackGeneticAlgorithm( knapsackSize[0],itemsSize, items);
+            	k1.geneticAlgorithm();
+            	
             }
         }
         
